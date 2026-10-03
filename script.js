@@ -134,4 +134,33 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
+
+    // Catálogo (Meus Serviços): clicar em um serviço abre o WhatsApp com a mensagem pronta
+    const WHATSAPP_NUMBER = '5582991898863';
+    const HEART_EMOJI = '\u{1F90E}';
+    const FLOWER_EMOJI = '\u{1F338}';
+
+    document.querySelectorAll('#servicos .service-list-card, #servicos .grid-card').forEach(card => {
+        const nameEl = card.querySelector('h4');
+        if (!nameEl) return;
+        const service = nameEl.textContent.trim();
+
+        card.style.cursor = 'pointer';
+        card.setAttribute('role', 'link');
+        card.setAttribute('tabindex', '0');
+        card.setAttribute('aria-label', 'Agendar ' + service + ' pelo WhatsApp');
+
+        const openWhatsApp = () => {
+            const msg = 'Olá Yasmin, eu gostaria de agendar um horário para ' + service + ' ' + HEART_EMOJI + FLOWER_EMOJI;
+            window.open('https://api.whatsapp.com/send?phone=' + WHATSAPP_NUMBER + '&text=' + encodeURIComponent(msg), '_blank', 'noopener');
+        };
+
+        card.addEventListener('click', openWhatsApp);
+        card.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                openWhatsApp();
+            }
+        });
+    });
 });
